@@ -1,22 +1,20 @@
 from django.db import models
 
 
-
-
-
 class Album(models.Model):
     title = models.CharField(max_length=200)
 
 
 class Artist(models.Model):
-    pass
+    name = models.CharField(max_length=200)
 
 
 class Track(models.Model):
-    pass
-
-
-
+    name = models.CharField(max_length=200)
+    composer = models.CharField(max_length=200)
+    miliseconds = models.PositiveIntegerField()
+    bytes = models.PositiveIntegerField()
+    unit_price = models.FloatField()
 
 
 class Question(models.Model):
