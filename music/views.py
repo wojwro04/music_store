@@ -5,3 +5,6 @@ from django.http import HttpResponse
 
 def index(request):
     return HttpResponse("Witaj na stronie z muzyką.")
+
+def albums(request):
+    return HttpResponse("Tutaj widoczne sa wszystkie albumy")
