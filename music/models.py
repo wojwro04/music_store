@@ -15,7 +15,7 @@ class Track(models.Model):
 
 class Album(models.Model):
     title = models.CharField(max_length=200)
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=True)
     track = models.ManyToManyField(Track)
 
 
