@@ -30,3 +30,14 @@ def artists(request):
     for artist in artists:
         lista += artist.name + "<br>"
     return HttpResponse("Tutaj widoczne sa wszyscy artyści:<br> %s" % lista)
+
+def add_artists(request):
+    new_name = "Rolling Stones"
+    q = Artist.objects.filter(name=new_name)
+    if len(q) == 0:
+        a = Artist(name=new_name)
+        a.save()
+        log = "Dodano artystę..."
+    else:
+        log = "Artysta już istnieje..."
+    return HttpResponse(log)
