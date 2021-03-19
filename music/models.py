@@ -1,13 +1,10 @@
 from django.db import models
 
 
-class Album(models.Model):
-    title = models.CharField(max_length=200)
-
 
 class Artist(models.Model):
     name = models.CharField(max_length=200)
-
+    #album = models.ManyToManyField(Album)
 
 class Track(models.Model):
     name = models.CharField(max_length=200)
@@ -15,6 +12,12 @@ class Track(models.Model):
     miliseconds = models.PositiveIntegerField()
     bytes = models.PositiveIntegerField()
     unit_price = models.FloatField()
+
+class Album(models.Model):
+    title = models.CharField(max_length=200)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    track = models.ManyToManyField(Track)
+
 
 
 class Question(models.Model):
