@@ -5,6 +5,9 @@ from django.db import models
 class Artist(models.Model):
     name = models.CharField(max_length=200)
     #album = models.ManyToManyField(Album)
+    def __str__(self):
+        return self.name
+
 
 class Track(models.Model):
     name = models.CharField(max_length=200)
@@ -13,11 +16,16 @@ class Track(models.Model):
     bytes = models.PositiveIntegerField()
     unit_price = models.FloatField()
 
+    def __str__(self):
+        return self.name
+
 class Album(models.Model):
     title = models.CharField(max_length=200)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=True)
     track = models.ManyToManyField(Track)
 
+    def __str__(self):
+        return self.title
 
 
 class Question(models.Model):
