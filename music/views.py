@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+import sqlite3
+con = sqlite3.connect('example.db')
+cur = con.cursor()
 
 # Create your views here.
 from .models import Album
@@ -41,3 +44,7 @@ def add_artists(request):
     else:
         log = "Artysta już istnieje..."
     return HttpResponse(log)
+
+def import_artists(request):
+    cur.execute('SELECT * FROM artists')
+    return cur.fetchall()

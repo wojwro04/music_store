@@ -8,4 +8,5 @@ urlpatterns = [
     path('tracks', views.tracks, name='tracks'),
     path('artists', views.artists, name='artists'),
     path('add_artists', views.add_artists, name='add_artists'),
+    path('import_artists', views.import_artists, name='import_artists'),
 ]
