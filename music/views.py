@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import sqlite3
-con = sqlite3.connect('example.db')
-cur = con.cursor()
+
 
 # Create your views here.
 from .models import Album
@@ -46,5 +45,62 @@ def add_artists(request):
     return HttpResponse(log)
 
 def import_artists(request):
+    con = sqlite3.connect('..\chinook.db')
+    cur = con.cursor()
     cur.execute('SELECT * FROM artists')
-    return cur.fetchall()
+    rows = cur.fetchall()
+    excepted = ""
+    added = ""
+    for row in rows:
+        new_name = row[1]
+        q = Artist.objects.filter(name=new_name)
+        if len(q) == 0:
+            a = Artist(name=new_name)
+            a.save()
+            added += new_name + '<br>'
+        else:
+            excepted += new_name + '<br>'
+    return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
+
+def import_tracks(request):
+    con = sqlite3.connect('..\chinook.db')
+    cur = con.cursor()
+    cur.execute('SELECT * FROM tracks')
+    rows = cur.fetchall()
+    excepted = ""
+    added = ""
+    for row in rows:
+        new_name = row[1]
+        if row[5] != None:
+            new_composer = row[5]
+        else:
+            new_composer = 'Nieznany'
+        new_miliseconds = row[6]
+        new_bytes = row[7]
+        new_unit_price = row[8]
+        q = Track.objects.filter(name=new_name)
+        if len(q) == 0:
+            t = Track(name=new_name, composer=new_composer, miliseconds=new_miliseconds, bytes=new_bytes, unit_price=new_unit_price)
+            t.save()
+            added += f"{new_name}, {new_composer}, {new_miliseconds}, {new_bytes}, {new_unit_price}'<br>'"
+        else:
+            excepted += f"{new_name}, {new_composer}, {new_miliseconds}, {new_bytes}, {new_unit_price}'<br>'"
+    return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
+
+def import_albums(request):
+    con = sqlite3.connect('..\chinook.db')
+    cur = con.cursor()
+    cur.execute('SELECT * FROM albums')
+    rows = cur.fetchall()
+    excepted = ""
+    added = ""
+    for row in rows:
+        new_title = row[1]
+        q = Album.objects.filter(title=new_title)
+        if len(q) == 0:
+            a = Album(title=new_title)
+            a.save()
+            added += new_title + '<br>'
+        else:
+            excepted += new_title + '<br>'
+    return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
