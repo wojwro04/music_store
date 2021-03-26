@@ -11,7 +11,7 @@ class Artist(models.Model):
 
 class Track(models.Model):
     name = models.CharField(max_length=200)
-    composer = models.CharField(max_length=200)
+    composer = models.CharField(max_length=200, null=True)
     miliseconds = models.PositiveIntegerField()
     bytes = models.PositiveIntegerField()
     unit_price = models.FloatField()

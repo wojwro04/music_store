@@ -63,6 +63,10 @@ def import_artists(request):
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
 def import_tracks(request):
+
+    Track.objects.all().delete()
+
+
     con = sqlite3.connect('../chinook.db')
     cur = con.cursor()
     cur.execute('SELECT * FROM tracks')
@@ -71,10 +75,7 @@ def import_tracks(request):
     added = ""
     for row in rows:
         new_name = row[1]
-        if row[5] != None:
-            new_composer = row[5]
-        else:
-            new_composer = 'Nieznany'
+        new_composer = row[5]
         new_miliseconds = row[6]
         new_bytes = row[7]
         new_unit_price = row[8]
