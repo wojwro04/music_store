@@ -45,7 +45,7 @@ def add_artists(request):
     return HttpResponse(log)
 
 def import_artists(request):
-    con = sqlite3.connect('..\chinook.db')
+    con = sqlite3.connect('../chinook.db')
     cur = con.cursor()
     cur.execute('SELECT * FROM artists')
     rows = cur.fetchall()
