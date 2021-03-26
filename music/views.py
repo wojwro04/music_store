@@ -116,3 +116,29 @@ def import_tracks_to_albums(request):
             Album.track.add(name)
             added += f"Album: {Album.title}"
     return HttpResponse("Zrobione<br>%s" % added)
+
+
+def import_tracks_to_albums2(request):
+    con = sqlite3.connect('../chinook.db')
+    cur = con.cursor()
+    added = ""
+    albums = Album.objects.all()
+    for a in albums:
+        print(a.title)
+        #if a.title !="Kult":
+        try:
+            cur.execute('SELECT AlbumId FROM albums WHERE Title = "{}"'.format(a.title))
+            rows = cur.fetchall()
+            albumid = rows[0][0]
+            cur.execute("SELECT Name FROM tracks WHERE AlbumId = '{}'".format(albumid))
+            rows = cur.fetchall()
+            for r in rows[0]:
+                tr = Track.objects.get(name=r)
+                a.track.add(tr)
+                #print("\t", tr)
+                a.save()
+        except:
+            pass
+
+
+    return HttpResponse("Zrobione<br>%s" % added)

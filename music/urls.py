@@ -12,4 +12,5 @@ urlpatterns = [
     path('import_tracks', views.import_tracks, name='import_tracks'),
     path('import_albums', views.import_albums, name='import_albums'),
     path('import_tracks_to_albums', views.import_tracks_to_albums, name='import_tracks_to_albums'),
+    path('import_tracks_to_albums2', views.import_tracks_to_albums2, name='import_tracks_to_albums2'),
 ]
