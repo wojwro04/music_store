@@ -63,7 +63,7 @@ def import_artists(request):
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
 def import_tracks(request):
-    con = sqlite3.connect('..\chinook.db')
+    con = sqlite3.connect('../chinook.db')
     cur = con.cursor()
     cur.execute('SELECT * FROM tracks')
     rows = cur.fetchall()
@@ -88,7 +88,7 @@ def import_tracks(request):
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
 def import_albums(request):
-    con = sqlite3.connect('..\chinook.db')
+    con = sqlite3.connect('../chinook.db')
     cur = con.cursor()
     cur.execute('SELECT * FROM albums')
     rows = cur.fetchall()
