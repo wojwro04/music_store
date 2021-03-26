@@ -63,10 +63,6 @@ def import_artists(request):
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
 def import_tracks(request):
-
-    Track.objects.all().delete()
-
-
     con = sqlite3.connect('../chinook.db')
     cur = con.cursor()
     cur.execute('SELECT * FROM tracks')
@@ -105,3 +101,18 @@ def import_albums(request):
         else:
             excepted += new_title + '<br>'
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
+
+def import_tracks_to_albums(request):
+    con = sqlite3.connect('../chinook.db')
+    cur = con.cursor()
+    cur.execute('SELECT * FROM tracks')
+    rows = cur.fetchall()
+    added = ""
+    for row in rows:
+        track_id = row[0]
+        name = row[1]
+        q = Album.objects.filter(track=track_id)
+        if q:
+            Album.track.add(name)
+            added += f"Album: {Album.title}"
+    return HttpResponse("Zrobione<br>%s" % added)
