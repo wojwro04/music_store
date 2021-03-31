@@ -26,6 +26,12 @@ class Album(models.Model):
 
     def __str__(self):
         return self.title
+        
+    def album_artist(self):
+        return self.artist
+    
+    def album_tracks(self):
+        return ', '.join([a.name for a in self.track.all()])
 
 
 class Question(models.Model):

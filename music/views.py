@@ -16,9 +16,13 @@ def albums(request):
     albums = Album.objects.all()
     lista = ""
     for album in albums:
-        lista += album.title+ "<br>"
+        lista += f"{album.title} "
+        artist = album.album_artist()
+        lista += f"({artist}): "
+        track_list = album.album_tracks()
+        lista += f"{track_list}<br>"
     return HttpResponse("Tutaj widoczne sa wszystkie albumy:<br> %s"% lista)
-
+    
 def tracks(request):
     tracks = Track.objects.all()
     lista = ""
@@ -85,14 +89,22 @@ def import_tracks(request):
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
 def import_albums(request):
+    Album.objects.all().delete()
+    
     con = sqlite3.connect('../chinook.db')
     cur = con.cursor()
     cur.execute('SELECT * FROM albums')
-    rows = cur.fetchall()
+    albums = cur.fetchall()
+    cur.execute('SELECT * FROM tracks')
+    tracks = cur.fetchall()
+    cur.execute('SELECT * FROM artists')
+    artists = cur.fetchall()
     excepted = ""
     added = ""
-    for row in rows:
-        new_title = row[1]
+    for album in albums:
+        album_id = album[0]
+        new_title = album[1]
+        al_artist_id = album[2]
         q = Album.objects.filter(title=new_title)
         if len(q) == 0:
             a = Album(title=new_title)
@@ -100,6 +112,25 @@ def import_albums(request):
             added += new_title + '<br>'
         else:
             excepted += new_title + '<br>'
+        
+        a = Album.objects.get(title=new_title)
+        
+        for track in tracks:
+            tr_name = track[1]
+            tr_album_id = track[2]
+            if tr_album_id == album_id:
+                tr = Track.objects.get(name=tr_name)
+                a.track.add(tr)
+                a.save()
+        
+        for artist in artists:
+            artist_id = artist[0]
+            ar_name = artist[1]
+            if artist_id == al_artist_id:
+                ar = Artist.objects.get(name=ar_name)
+                a = Album(artist=ar)
+                a.save()
+        
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
 def import_tracks_to_albums(request):
@@ -142,3 +173,4 @@ def import_tracks_to_albums2(request):
 
 
     return HttpResponse("Zrobione<br>%s" % added)
+
