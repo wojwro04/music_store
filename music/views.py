@@ -16,10 +16,11 @@ def albums(request):
     albums = Album.objects.all()
     lista = ""
     for album in albums:
-        lista += f"{album.title} "
+        title = album.title
         artist = album.album_artist()
-        lista += f"({artist}): "
         track_list = album.album_tracks()
+        lista += f"{album.title} "
+        lista += f"({artist}): "
         lista += f"{track_list}<br>"
     return HttpResponse("Tutaj widoczne sa wszystkie albumy:<br> %s"% lista)
     
@@ -128,8 +129,9 @@ def import_albums(request):
             ar_name = artist[1]
             if artist_id == al_artist_id:
                 ar = Artist.objects.get(name=ar_name)
-                a = Album(artist=ar)
+                a.artist = ar
                 a.save()
+                break
         
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
