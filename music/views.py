@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template import loader
 from django.http import HttpResponse
 import sqlite3
 
@@ -9,8 +10,15 @@ from .models import Track
 from .models import Artist
 
 
+#def index(request):
+#    return HttpResponse("Witaj na stronie z muzyką.")
 def index(request):
-    return HttpResponse("Witaj na stronie z muzyką.")
+    album_list = Album.objects.all()
+    template = loader.get_template('music/index.html')
+    context = {
+        'album_list': album_list,
+    }
+    return HttpResponse(template.render(context, request))
 
 def albums(request):
     albums = Album.objects.all()
@@ -23,7 +31,22 @@ def albums(request):
         lista += f"({artist}): "
         lista += f"{track_list}<br>"
     return HttpResponse("Tutaj widoczne sa wszystkie albumy:<br> %s"% lista)
-    
+
+def album(request, album_title):
+    a = Album.objects.get(title=album_title)
+    artist_name = a.album_artist()
+    artist = Artist.objects.get(name=artist_name)
+    tracks = a.album_tracks()
+    track_list = tracks.split(',')
+    template = loader.get_template('music/album.html')
+    context = {
+        'album_title': album_title,
+        'artist_name': artist_name,
+        'track_list': track_list,
+        'artist': artist,
+    }
+    return HttpResponse(template.render(context, request))
+
 def tracks(request):
     tracks = Track.objects.all()
     lista = ""
@@ -37,6 +60,13 @@ def artists(request):
     for artist in artists:
         lista += artist.name + "<br>"
     return HttpResponse("Tutaj widoczne sa wszyscy artyści:<br> %s" % lista)
+
+def artist(request, artist):
+    template = loader.get_template('music/artist.html')
+    context = {
+        'artist': artist,
+    }
+    return HttpResponse(template.render(context, request))
 
 def add_artists(request):
     new_name = "Rolling Stones"
@@ -90,7 +120,7 @@ def import_tracks(request):
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
 def import_albums(request):
-    Album.objects.all().delete()
+    #Album.objects.all().delete()
     
     con = sqlite3.connect('../chinook.db')
     cur = con.cursor()
@@ -135,44 +165,44 @@ def import_albums(request):
         
     return HttpResponse("Pominięto:<br> %s<br>Dodano:<br>%s" % (excepted,added))
 
-def import_tracks_to_albums(request):
-    con = sqlite3.connect('../chinook.db')
-    cur = con.cursor()
-    cur.execute('SELECT * FROM tracks')
-    rows = cur.fetchall()
-    added = ""
-    for row in rows:
-        track_id = row[0]
-        name = row[1]
-        q = Album.objects.filter(track=track_id)
-        if q:
-            Album.track.add(name)
-            added += f"Album: {Album.title}"
-    return HttpResponse("Zrobione<br>%s" % added)
+# def import_tracks_to_albums(request):
+    # con = sqlite3.connect('../chinook.db')
+    # cur = con.cursor()
+    # cur.execute('SELECT * FROM tracks')
+    # rows = cur.fetchall()
+    # added = ""
+    # for row in rows:
+        # track_id = row[0]
+        # name = row[1]
+        # q = Album.objects.filter(track=track_id)
+        # if q:
+            # Album.track.add(name)
+            # added += f"Album: {Album.title}"
+    # return HttpResponse("Zrobione<br>%s" % added)
 
 
-def import_tracks_to_albums2(request):
-    con = sqlite3.connect('../chinook.db')
-    cur = con.cursor()
-    added = ""
-    albums = Album.objects.all()
-    for a in albums:
-        print(a.title)
-        #if a.title !="Kult":
-        try:
-            cur.execute('SELECT AlbumId FROM albums WHERE Title = "{}"'.format(a.title))
-            rows = cur.fetchall()
-            albumid = rows[0][0]
-            cur.execute("SELECT Name FROM tracks WHERE AlbumId = '{}'".format(albumid))
-            rows = cur.fetchall()
-            for r in rows[0]:
-                tr = Track.objects.get(name=r)
-                a.track.add(tr)
-                #print("\t", tr)
-                a.save()
-        except:
-            pass
+# def import_tracks_to_albums2(request):
+    # con = sqlite3.connect('../chinook.db')
+    # cur = con.cursor()
+    # added = ""
+    # albums = Album.objects.all()
+    # for a in albums:
+        # print(a.title)
+        # #if a.title !="Kult":
+        # try:
+            # cur.execute('SELECT AlbumId FROM albums WHERE Title = "{}"'.format(a.title))
+            # rows = cur.fetchall()
+            # albumid = rows[0][0]
+            # cur.execute("SELECT Name FROM tracks WHERE AlbumId = '{}'".format(albumid))
+            # rows = cur.fetchall()
+            # for r in rows[0]:
+                # tr = Track.objects.get(name=r)
+                # a.track.add(tr)
+                # #print("\t", tr)
+                # a.save()
+        # except:
+            # pass
 
 
-    return HttpResponse("Zrobione<br>%s" % added)
+    # return HttpResponse("Zrobione<br>%s" % added)
 

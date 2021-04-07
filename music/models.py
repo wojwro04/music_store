@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 class Artist(models.Model):
     name = models.CharField(max_length=200)
     #album = models.ManyToManyField(Album)
@@ -31,8 +30,7 @@ class Album(models.Model):
         return self.artist
     
     def album_tracks(self):
-        output = ', '.join([a.name for a in self.track.all()])
-        return HttpResponse(output)
+        return ', '.join([a.name for a in self.track.all()])
 
 
 class Question(models.Model):

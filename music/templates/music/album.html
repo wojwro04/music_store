@@ -1,0 +1,6 @@
+<h1>Album: {{ album_title }}<br>
+Wykonawca: <a href="/music/{{ artist.name }}/">{{ artist.name }}</a>
+</h1>
+{% for i in track_list %}
+	<li>{{ i }}</li>
+{% endfor %}
