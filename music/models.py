@@ -31,7 +31,8 @@ class Album(models.Model):
         return self.artist
     
     def album_tracks(self):
-        return ', '.join([a.name for a in self.track.all()])
+        output = ', '.join([a.name for a in self.track.all()])
+        return HttpResponse(output)
 
 
 class Question(models.Model):
