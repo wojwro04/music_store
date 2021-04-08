@@ -35,7 +35,11 @@ def albums(request):
 def album(request, album_title):
     a = Album.objects.get(title=album_title)
     artist_name = a.album_artist()
-    artist = Artist.objects.get(name=artist_name)
+    artist = Artist.objects.get(name=a.album_artist())
+    #
+    albums = Album.objects.filter(artist=artist)
+    print(albums)
+    #
     tracks = a.album_tracks()
     track_list = tracks.split(',')
     template = loader.get_template('music/album.html')
@@ -62,12 +66,13 @@ def artists(request):
     return HttpResponse("Tutaj widoczne sa wszyscy artyści:<br> %s" % lista)
 
 def artist(request, artist):
+    a = Artist.objects.get(name=artist)
     template = loader.get_template('music/artist.html')
     context = {
         'artist': artist,
     }
     return HttpResponse(template.render(context, request))
-
+    
 def add_artists(request):
     new_name = "Rolling Stones"
     q = Artist.objects.filter(name=new_name)
