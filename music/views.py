@@ -34,18 +34,12 @@ def albums(request):
 
 def album(request, album_title):
     a = Album.objects.get(title=album_title)
-    artist_name = a.album_artist()
     artist = Artist.objects.get(name=a.album_artist())
-    #
-    albums = Album.objects.filter(artist=artist)
-    print(albums)
-    #
     tracks = a.album_tracks()
     track_list = tracks.split(',')
     template = loader.get_template('music/album.html')
     context = {
         'album_title': album_title,
-        'artist_name': artist_name,
         'track_list': track_list,
         'artist': artist,
     }
@@ -67,9 +61,11 @@ def artists(request):
 
 def artist(request, artist):
     a = Artist.objects.get(name=artist)
+    album_list = Album.objects.filter(artist=a)
     template = loader.get_template('music/artist.html')
     context = {
         'artist': artist,
+        'album_list': album_list,
     }
     return HttpResponse(template.render(context, request))
     

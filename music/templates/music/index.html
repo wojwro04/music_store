@@ -2,7 +2,7 @@
 {% if album_list %}
     <ul>
     {% for album in album_list %}
-        <li><a href="/music/{{ album.title }}/">{{ album.title }} - {{ album.artist }}</a></li>
+        <li><a href="/music/album/{{ album.title }}/">{{ album.title }} - {{ album.artist }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
