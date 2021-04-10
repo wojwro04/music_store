@@ -1,0 +1,11 @@
+<h1>Gatunek: {{ genre }}<br></h1>
+Utwory z tego gatunku:
+{% if track_list %}
+    <ul>
+    {% for track in track_list %}
+        <li><a href="/music/track/{{ track }}/">{{ track }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Brak dostępnych utworów</p>
+{% endif %}

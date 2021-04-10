@@ -1,6 +1,6 @@
-<h1>Album: {{ album_title }}<br>
-Wykonawca: <a href="/music/artist/{{ artist.name }}/">{{ artist.name }}</a>
-</h1>
-{% for i in track_list %}
-	<li>{{ i }}</li>
+<h1>Album: {{ album_title }}</h1>
+Wykonawca: <a href="/music/artist/{{ artist.name }}/">{{ artist.name }}</a><br><br>
+Utwory:
+{% for track in track_list %}
+	<li><a href="/music/track/{{ track.name }}/">{{ track.name }}</a></li>
 {% endfor %}
