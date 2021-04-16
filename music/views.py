@@ -47,7 +47,7 @@ def genres(request):
 
 def genre(request, genre):
     g = Genre.objects.get(name=genre)
-    track_list = Track.objects.all()
+    track_list = Track.objects.filter(genre=g)
     template = loader.get_template('music/genre.html')
     context = {
         'genre': genre,
@@ -64,14 +64,16 @@ def tracks(request):
 
 def track(request, track_name):
     t = Track.objects.get(name=track_name)
-    album = Album.objects.get(track = t)
-    artist = Artist.objects.get(name=album.album_artist())
+    #album = Album.objects.get(track = t)
+    albums = Album.objects.filter(track=t)
+    #artist = Artist.objects.get(name=album.album_artist())
     genre = t.genre
     template = loader.get_template('music/track.html')
     context = {
         'track_name': track_name,
-        'album': album,
-        'artist': artist,
+        #'album': album,
+        'albums': albums,
+        #'artist': artist,
         'genre': genre,
     }
     return HttpResponse(template.render(context, request))

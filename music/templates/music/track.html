@@ -1,5 +1,8 @@
 <h1>Utwór: {{ track_name }}</h1>
-Album: <a href="/music/album/{{ album.title }}/">{{ album.title }}</a><br>
-Wykonawca: <a href="/music/artist/{{ artist.name }}/">{{ artist.name }}</a><br>
+Albumy:<br>
+{% for album in albums %}
+	<li><a href="/music/track/{{ album.title }}/">{{ album.title }}</a></li>
+{% endfor %}
+
 Gatunek: <a href="/music/genre/{{ genre.name }}/">{{ genre.name }}</a><br>
 
