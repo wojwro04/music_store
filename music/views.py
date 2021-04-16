@@ -14,19 +14,17 @@ from .models import Playlist
 #def index(request):
 #    return HttpResponse("Witaj na stronie z muzyką.")
 def index(request):
-    album_list = Album.objects.all()
     template = loader.get_template('music/index.html')
-    context = {
-        'album_list': album_list,
-    }
+    context = {}
     return HttpResponse(template.render(context, request))
 
 def artists(request):
     artists = Artist.objects.all()
-    lista = ""
-    for artist in artists:
-        lista += artist.name + "<br>"
-    return HttpResponse("Tutaj widoczne sa wszyscy artyści:<br> %s" % lista)
+    template = loader.get_template('music/artists.html')
+    context = {
+        'artists': artists,
+    }
+    return HttpResponse(template.render(context, request))
 
 def artist(request, artist):
     a = Artist.objects.get(name=artist)
@@ -40,10 +38,11 @@ def artist(request, artist):
 
 def genres(request):
     genres = Genre.objects.all()
-    lista = ""
-    for genre in genres:
-        lista += genre.name + "<br>"
-    return HttpResponse("Tutaj widoczne sa wszystkie gatunki:<br> %s" % lista)
+    template = loader.get_template('music/genres.html')
+    context = {
+        'genres': genres,
+    }
+    return HttpResponse(template.render(context, request))
 
 def genre(request, genre):
     g = Genre.objects.get(name=genre)
@@ -64,30 +63,23 @@ def tracks(request):
 
 def track(request, track_name):
     t = Track.objects.get(name=track_name)
-    #album = Album.objects.get(track = t)
     albums = Album.objects.filter(track=t)
-    #artist = Artist.objects.get(name=album.album_artist())
     genre = t.genre
     template = loader.get_template('music/track.html')
     context = {
         'track_name': track_name,
-        #'album': album,
         'albums': albums,
-        #'artist': artist,
         'genre': genre,
     }
     return HttpResponse(template.render(context, request))
 
 def albums(request):
     albums = Album.objects.all()
-    lista = ""
-    for album in albums:
-        artist = album.album_artist()
-        track_list = album.album_tracks()
-        lista += f"{album.title} "
-        lista += f"({artist}): "
-        lista += f"{track_list}<br>"
-    return HttpResponse("Tutaj widoczne sa wszystkie albumy:<br> %s"% lista)
+    template = loader.get_template('music/albums.html')
+    context = {
+        'albums': albums,
+    }
+    return HttpResponse(template.render(context, request))
 
 def album(request, album_title):
     a = Album.objects.get(title=album_title)
@@ -103,14 +95,15 @@ def album(request, album_title):
 
 def playlists(request):
     playlists = Playlist.objects.all()
-    lista = ""
-    for playlist in playlists:
-        lista += f"{playlist.name}<br>"
-    return HttpResponse("Tutaj widoczne sa wszystkie playlisty:<br> %s"% lista)
+    template = loader.get_template('music/playlists.html')
+    context = {
+        'playlists': playlists,
+    }
+    return HttpResponse(template.render(context, request))
 
 def playlist(request, playlist_name):
     p = Playlist.objects.get(name=playlist_name)
-    track_list = [ Track.objects.get(name=track) for track in p.track.all() ]
+    track_list = p.track.all()
     template = loader.get_template('music/playlist.html')
     context = {
         'playlist_name': playlist_name,

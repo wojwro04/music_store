@@ -1,0 +1,5 @@
+<a href="/music/">Strona główna</a>
+<h1>Tutaj widoczni sa wszyscy wykonawcy:</h1>
+{% for artist in artists %}
+	<li><a href="/music/artist/{{ artist.name }}/">{{ artist.name }}</a></li>
+{% endfor %}

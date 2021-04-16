@@ -4,14 +4,14 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('albums', views.albums, name='albums'),
+    path('albums/', views.albums, name='albums'),
     path('album/<str:album_title>/', views.album, name='album'),
     path('tracks', views.tracks, name='tracks'),
-    path('artists', views.artists, name='artists'),
-    path('playlists', views.playlists, name='playlists'),
+    path('artists/', views.artists, name='artists'),
+    path('playlists/', views.playlists, name='playlists'),
     path('genre/<str:genre>/', views.genre, name='genre'),
     path('playlist/<str:playlist_name>/', views.playlist, name='playlist'),
-    path('genres', views.genres, name='genres'),
+    path('genres/', views.genres, name='genres'),
     path('artist/<str:artist>/', views.artist, name='artist'),
     path('track/<str:track_name>/', views.track, name='track'),
     path('add_artists', views.add_artists, name='add_artists'),

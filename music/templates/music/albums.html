@@ -1,9 +1,5 @@
 <a href="/music/">Strona główna</a>
-<h1>Utwór: {{ track_name }}</h1>
-Albumy:<br>
+<h1>Tutaj widoczne sa wszystkie albumy:</h1>
 {% for album in albums %}
 	<li><a href="/music/album/{{ album.title }}/">{{ album.title }}</a> (Wykonawca: <a href="/music/artist/{{ album.artist }}/">{{ album.artist }}</a>)</li>
 {% endfor %}
-
-Gatunek: <a href="/music/genre/{{ genre.name }}/">{{ genre.name }}</a><br>
-

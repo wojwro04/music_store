@@ -1,0 +1,5 @@
+<a href="/music/">Strona główna</a>
+<h1>Tutaj widoczne sa wszystkie gatunki:</h1>
+{% for genre in genres %}
+	<li><a href="/music/genre/{{ genre.name }}/">{{ genre.name }}</a></li>
+{% endfor %}

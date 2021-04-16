@@ -1,0 +1,5 @@
+<a href="/music/">Strona główna</a>
+<h1>Tutaj widoczne sa wszystkie playlisty:</h1>
+{% for playlist in playlists %}
+	<li><a href="/music/playlist/{{ playlist.name }}/">{{ playlist.name }}</a></li>
+{% endfor %}

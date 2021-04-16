@@ -1,10 +1,8 @@
 <h1>Witaj na stronie z muzyką</h1>
-{% if album_list %}
-    <ul>
-    {% for album in album_list %}
-        <li><a href="/music/album/{{ album.title }}/">{{ album.title }} - {{ album.artist }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Brak dostępnych albumów</p>
-{% endif %}
+Zobacz:
+<ul>
+	<li><a href="/music/albums/">Albumy</a></li>
+	<li><a href="/music/playlists/">Playlisty</a></li>
+	<li><a href="/music/artists/">Wykonawcy</a></li>
+	<li><a href="/music/genres/">Gatunki</a></li>
+</ul>
