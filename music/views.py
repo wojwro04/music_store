@@ -10,6 +10,25 @@ from .models import Track
 from .models import Artist
 from .models import Genre
 from .models import Playlist
+from .forms import SearchForm
+
+def search(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SearchForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return track(request, request.POST['title'])
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SearchForm()
+    template = loader.get_template('music/search.html')
+    return HttpResponse(template.render({'form': form}, request))
 
 #def index(request):
 #    return HttpResponse("Witaj na stronie z muzyką.")

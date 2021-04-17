@@ -14,6 +14,7 @@ urlpatterns = [
     path('genres/', views.genres, name='genres'),
     path('artist/<str:artist>/', views.artist, name='artist'),
     path('track/<str:track_name>/', views.track, name='track'),
+    path('search/', views.search, name='search'),
     path('add_artists', views.add_artists, name='add_artists'),
     path('import_artists', views.import_artists, name='import_artists'),
     path('import_genres', views.import_genres, name='import_genres'),
