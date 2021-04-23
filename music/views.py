@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
+from django.views import generic
 import sqlite3
 
 
@@ -13,29 +14,71 @@ from .models import Playlist
 from .forms import SearchForm
 
 def search(request):
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
         form = SearchForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return track(request, request.POST['title'])
-
-    # if a GET (or any other method) we'll create a blank form
+            if request.POST['choice_field'] == 'track':
+                if request.POST['title']:
+                    if 'exact' in request.POST:
+                        try:
+                            return track(request, request.POST['title'])
+                        except Track.DoesNotExist:
+                            tracks = []
+                            return search_results_tracks(request, tracks)
+                    else:                
+                        tracks = Track.objects.filter(name__contains=request.POST['title'])
+                        return search_results_tracks(request, tracks)
+            if request.POST['choice_field'] == 'artist':
+                if request.POST['title']:
+                    if 'exact' in request.POST:
+                        try:
+                            return artist(request, request.POST['title'])
+                        except Artist.DoesNotExist:
+                            artists = []
+                            return search_results_artists(request, artists)
+                    else:                
+                        artists = Artist.objects.filter(name__contains=request.POST['title'])
+                        return search_results_artists(request, artists)
+            if request.POST['choice_field'] == 'album':
+                if request.POST['title']:
+                    if 'exact' in request.POST:
+                        try:
+                            return album(request, request.POST['title'])
+                        except Album.DoesNotExist:
+                            albums = []
+                            return search_results_albums(request, albums)
+                    else:                
+                        albums = Album.objects.filter(title__contains=request.POST['title'])
+                        return search_results_albums(request, albums)
     else:
         form = SearchForm()
     template = loader.get_template('music/search.html')
     return HttpResponse(template.render({'form': form}, request))
 
-#def index(request):
-#    return HttpResponse("Witaj na stronie z muzyką.")
+def search_results_tracks(request, tracks):
+    template = loader.get_template('music/search_results_tracks.html')
+    context = {
+        'tracks': tracks,
+    }
+    return HttpResponse(template.render(context, request))
+
+def search_results_artists(request, artists):
+    template = loader.get_template('music/search_results_artists.html')
+    context = {
+        'artists': artists,
+    }
+    return HttpResponse(template.render(context, request))
+
+def search_results_albums(request, albums):
+    template = loader.get_template('music/search_results_albums.html')
+    context = {
+        'albums': albums,
+    }
+    return HttpResponse(template.render(context, request))
+
 def index(request):
     template = loader.get_template('music/index.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(template.render({}, request))
 
 def artists(request):
     artists = Artist.objects.all()
@@ -103,7 +146,7 @@ def albums(request):
 def album(request, album_title):
     a = Album.objects.get(title=album_title)
     artist = Artist.objects.get(name=a.album_artist())
-    track_list = [ Track.objects.get(name=track) for track in a.track.all() ]
+    track_list = a.track.all()
     template = loader.get_template('music/album.html')
     context = {
         'album_title': album_title,

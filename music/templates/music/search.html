@@ -1,6 +1,10 @@
+<a href="/music/">Strona główna</a>
 <h1>Wyszukiwanie piosenki</h1>
 <form action="/music/search/" method="post">
-    {% csrf_token %}
+    <input type="radio" name="choice_field" value="track" checked="checked"/>Piosenki<br>
+	<input type="radio" name="choice_field" value="artist" />Artyści<br>
+	<input type="radio" name="choice_field" value="album" />Albumy<br>
+	{% csrf_token %}
     {{ form }}
     <input type="submit" value="Wyszukaj">
 </form>

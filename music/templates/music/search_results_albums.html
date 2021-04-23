@@ -1,0 +1,9 @@
+<a href="/music/">Strona główna</a>
+<h2>Wyniki wyszukiwania:</h2>
+{% if albums %}
+	{% for album in albums %}
+		<li><a href="/music/album/{{ album.title }}/">{{ album.title }}</a></li>
+	{% endfor %}
+{% else %}
+    <p>Nie znaleziono albumów</p>
+{% endif %}

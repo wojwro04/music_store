@@ -1,0 +1,9 @@
+<a href="/music/">Strona główna</a>
+<h2>Wyniki wyszukiwania:</h2>
+{% if artists %}
+	{% for artist in artists %}
+		<li><a href="/music/artist/{{ artist.name }}/">{{ artist.name }}</a></li>
+	{% endfor %}
+{% else %}
+    <p>Nie znaleziono artystów</p>
+{% endif %}

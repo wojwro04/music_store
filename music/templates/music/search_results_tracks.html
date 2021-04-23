@@ -1,0 +1,9 @@
+<a href="/music/">Strona główna</a>
+<h2>Wyniki wyszukiwania:</h2>
+{% if tracks %}
+	{% for track in tracks %}
+		<li><a href="/music/track/{{ track.name }}/">{{ track.name }}</a></li>
+	{% endfor %}
+{% else %}
+    <p>Nie znaleziono utworów</p>
+{% endif %}
